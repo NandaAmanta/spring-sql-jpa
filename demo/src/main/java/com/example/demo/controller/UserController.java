@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.RequestCreateNewUser;
+import com.example.demo.dto.RequestEditEmail;
 import com.example.demo.dto.Response;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -20,12 +21,11 @@ public class UserController {
     @GetMapping
     @ResponseBody
     public Response<Iterable<User>> getAllUsers(@RequestParam @Nullable String email) {
-        if(email != null){
+        if (email != null) {
             var data = userRepository.findByEmail(email);
             return new Response(true, "200", "Success to get all users", data);
         }
-        System.out.println("Hello World");
-        var data = userRepository.findUsersWherePasswordIsEya();
+        var data = userRepository.findAll();
         return new Response(true, "200", "Success to get all users", data);
     }
 
@@ -48,5 +48,17 @@ public class UserController {
         userRepository.save(user);
         return new Response(true, "200", "Success to add new User to Database", null);
     }
+
+    @PutMapping(path = "/{id}")
+    @ResponseBody
+    public Response editEmailUser(@PathVariable String id, @RequestBody RequestEditEmail req) {
+        try {
+            userRepository.updateEmail(Integer.parseInt(id), req.getEmail());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return new Response(true, "200", "Success to Edit User's Email", null);
+    }
+
 
 }
