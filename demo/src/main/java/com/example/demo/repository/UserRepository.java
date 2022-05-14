@@ -11,6 +11,6 @@ import java.util.Collection;
 public interface UserRepository extends CrudRepository<User,Integer>  {
     User findByEmail(String email);
 
-    @Query(value = "SELECT * FROM user",nativeQuery = true)
+    @Query(value = "SELECT * FROM user WHERE password='eya'",nativeQuery = true)
     Collection<User> findUsersWherePasswordIsEya();
 }
